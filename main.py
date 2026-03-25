@@ -9,8 +9,8 @@ from functions.get_files_info import schema_get_files_info
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_write_file
 from call_function import call_function
+from arg_parser import parse_args
 
-verbose = True
 
 def main():
     input_tokens: List[int] = []
@@ -18,14 +18,14 @@ def main():
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
 
-    if len(sys.argv) < 2:
-        print("Prompt is missing")
-        sys.exit()
+    args = parse_args(sys.argv)
+    verbose = args["verbose"]
+    working_directory = args["working_directory"]
+    prompt = args["prompt"]
 
-    prompt = sys.argv[1]
-    system_prompt = """
-You're a helpful AI coding agent. When a user asks a question or makes a request, make a function call plan. You can perform the following operations: list files and directories, read the content of a file, write to a file (create or update), and run a Python file with optional arguments.All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons. When the user asks about the code project, they are referring to the working directory, so you should typically start by looking at the project's files and figuring out how to run the project and how to run its tests. You'll always want to test the tests and the actual project to verify that behavior is working.
-"""
+    system_prompt = os.getenv("SYSTEM_PROMPT")
+    if system_prompt is None:
+        system_prompt="You're a helpful AI coding agent. When a user asks a question or makes a request, make a function call plan. You can perform the following operations: list files and directories, read the content of a file, write to a file (create or update), and run a Python file with optional arguments.All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons. When the user asks about the code project, they are referring to the working directory, so you should typically start by looking at the project's files and figuring out how to run the project and how to run its tests. You'll always want to test the tests and the actual project to verify that behavior is working."
 
     messages = [types.Content(role="user", parts=[types.Part(text=prompt)])]
 
@@ -67,7 +67,7 @@ You're a helpful AI coding agent. When a user asks a question or makes a request
                 for part in candidate.content.parts:
                     if part is None or part.function_call is None:
                         continue
-                    result = call_function(part.function_call, part.thought_signature)
+                    result = call_function(working_directory, part.function_call, part.thought_signature)
                     if verbose:
                         print("----------------------------------")
                         print(f"executed function: {part.function_call.name}({part.function_call.args}), got result: {result.parts[0].function_response.response.get('result')}")

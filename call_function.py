@@ -6,10 +6,10 @@ from functions.get_file_content import get_file_content
 from functions.write_file import write_file
 from functions.run_python_file import run_python_file
 
-working_directory = "demo-project"
 
 
-def call_function(function_call: FunctionCall, thought_signature: bytes) -> types.Content:
+
+def call_function(working_directory: str, function_call: FunctionCall, thought_signature: bytes) -> types.Content:
 
     result = ""
     if function_call.name == "get_files_info":
