@@ -35,3 +35,8 @@ uv run main.py --p "Fix the issue in main.py" --wd ./demo-project
 * Requires a properly structured project directory
 * Can only be used with Google Gemini's API and SDK
 * Prompts within the code can be improved.
+
+## TODO
+ * make agent model provider agnostic
+ * Create workflow to automatically include all the functions from functions folder without manually editing the rest of the project
+
