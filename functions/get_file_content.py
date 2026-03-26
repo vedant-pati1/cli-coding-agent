@@ -41,7 +41,3 @@ schema_get_file_content = types.FunctionDeclaration(
         },
     ),
 )
-
-
-if __name__ == "__main__":
-    print(get_file_content("demo-project", "main.py"))

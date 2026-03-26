@@ -63,8 +63,3 @@ schema_run_python_file = types.FunctionDeclaration(
         },
     ),
 )
-
-
-if __name__ == "__main__":
-    print(run_python_file(".", "./tests.py"))
-    print(run_python_file(".", "./tests.py", args=["arg1", "arg2"]))

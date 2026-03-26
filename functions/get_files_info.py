@@ -33,5 +33,3 @@ schema_get_files_info = types.FunctionDeclaration(
 )
 
 
-if __name__ == "__main__":
-    print(get_files_info("demo-project", "."))

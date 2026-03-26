@@ -43,7 +43,3 @@ schema_write_file = types.FunctionDeclaration(
         },
     ),
 )
-
-
-if __name__ == "__main__":
-    print(write_file(".", "./games", "hi this is a game"))
